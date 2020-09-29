@@ -1,15 +1,15 @@
 import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
-// import { Post } from "./entities/Post";
 import mikroConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
+import { UserResolver } from "./resolvers/user";
 
-const main = async () => {
+const main = async (PORT: number) => {
   // Connect to database
   const orm = await MikroORM.init(mikroConfig);
   // Get migrations
@@ -19,7 +19,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver],
+      resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
     context: () => ({ em: orm.em }),
@@ -27,9 +27,9 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app });
 
-  app.listen(4000, () => {
-    console.log(`🚀 Server is starting on localhost:${4000}`);
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is starting on localhost:${PORT}`);
   });
 };
 
-main().catch((err) => console.error(err));
+main(4000).catch((err) => console.error(err));
