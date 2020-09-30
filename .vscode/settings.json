@@ -1,6 +1,10 @@
 {
-    "cSpell.words": [
-        "Mikro",
-        "postgresql"
-    ]
+  "cSpell.words": [
+    "Mikro",
+    "URQL",
+    "chakra",
+    "esnext",
+    "postgresql",
+    "resave"
+  ]
 }
