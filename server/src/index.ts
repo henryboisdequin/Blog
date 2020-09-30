@@ -35,6 +35,7 @@ const main = async (PORT: number) => {
         sameSite: "lax",
         secure: __prod__,
       },
+      saveUninitialized: false,
       secret: "qiownduwedfuweduheudhuehdu",
       resave: false,
     })
