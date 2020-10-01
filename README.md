@@ -17,7 +17,7 @@ Website:
 - Next.js
 - Chakra
 
-### Features
+### Features (in progress)
 
 - Secure login/register/logout experience (cookies)
 - Ability to post blog posts

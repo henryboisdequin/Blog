@@ -12,6 +12,7 @@ import {
 import { User } from "../entities/User";
 import argon2 from "argon2";
 import { Field } from "@mikro-orm/postgresql";
+import { EntityManager } from "@mikro-orm/postgresql";
 
 @InputType()
 class UsernamePasswordInput {
@@ -57,12 +58,12 @@ export class UserResolver {
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-    if (options.username.length <= 2) {
+    if (options.username.length <= 1) {
       return {
         errors: [
           {
             field: "username",
-            message: "Length of username must be greater than 2.",
+            message: "Length of username must be greater than or equal to 1.",
           },
         ],
       };
@@ -80,14 +81,27 @@ export class UserResolver {
     }
 
     const hashedPassword = await argon2.hash(options.password);
-    const user = em.create(User, {
-      username: options.username,
-      password: hashedPassword,
-    });
+    let user;
+    // const user = em.create(User, {
+    //   username: options.username,
+    //   password: hashedPassword,
+    // });
 
     try {
-      await em.persistAndFlush(user);
+      const result = await (em as EntityManager)
+        .createQueryBuilder(User)
+        .getKnexQuery()
+        .insert({
+          username: options.username,
+          password: hashedPassword,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+        .returning("*");
+      user = result[0];
+      // await em.persistAndFlush(user);
     } catch (err) {
+      //err.code === "23505" || err.detail.includes("already exists")
       if (err.code === "23505") {
         // duplicate username error
         return {
