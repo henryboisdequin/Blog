@@ -1,6 +1,8 @@
+import { NavBar } from "../components/NavBar";
+
 const Index = () => (
   <div>
-    <h1 style={{ fontSize: "34px" }}>Hello World</h1>
+    <NavBar />
   </div>
 );
 
