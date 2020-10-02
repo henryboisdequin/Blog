@@ -4,7 +4,9 @@
     "Mikro",
     "URQL",
     "chakra",
+    "dedup",
     "esnext",
+    "graphcache",
     "postgresql",
     "resave"
   ]
