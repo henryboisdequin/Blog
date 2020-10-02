@@ -2701,6 +2701,11 @@ node-pre-gyp@^0.15.0:
     semver "^5.3.0"
     tar "^4.4.2"
 
+nodemailer@^6.4.12:
+  version "6.4.12"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.4.12.tgz#efb3946f3e5c5afad50af8090e070957cea1c43d"
+  integrity sha512-c/WplZp24Lxc+hn0w/kweNxcYGpaqtH1iecfGKTbXVmp5qx+ILApKsmCAucWWIIQiYKKH4ZA/ffSNOsai6xJGA==
+
 nodemon@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.4.tgz#55b09319eb488d6394aa9818148c0c2d1c04c416"

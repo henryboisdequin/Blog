@@ -16,6 +16,7 @@ Website:
 - Redis
 - Next.js
 - Chakra
+- Formik
 
 ### Features (in progress)
 
