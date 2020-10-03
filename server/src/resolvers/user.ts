@@ -12,9 +12,11 @@ import { User } from "../entities/User";
 import argon2 from "argon2";
 import { Field } from "@mikro-orm/postgresql";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { COOKIE_NAME } from "../constants";
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from "../constants";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
+import { sendEmail } from "../utils/sendEmail";
+import { v4 } from "uuid";
 
 @ObjectType()
 class FieldError {
@@ -35,12 +37,92 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { req, em, redis }: MyContext
+  ): Promise<UserResponse> {
+    if (newPassword.length <= 4) {
+      return {
+        errors: [
+          {
+            field: "newPassword",
+            message: "Length of password must be greater than 4.",
+          },
+        ],
+      };
+    }
+
+    const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
+
+    if (!userId) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "Token doesn't exist or is expired.",
+          },
+        ],
+      };
+    }
+    const userIdNum = parseInt(userId);
+    console.log(userIdNum);
+    const user = await em.findOne(User, { id: userIdNum });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "token",
+            message: "User no longer exists.",
+          },
+        ],
+      };
+    }
+
+    user.password = await argon2.hash(newPassword);
+    em.persistAndFlush(user);
+
+    // login user
+    req.session.userId = user.id;
+
+    return { user };
+  }
+
   @Mutation(() => Boolean)
   async forgotPassword(
     @Arg("email") email: string,
-    @Ctx() { req, em }: MyContext
+    @Ctx() { req, em, redis }: MyContext
   ) {
-    // const user = await em.findOne(User, { email });
+    const user = await em.findOne(User, { email });
+    if (!user) {
+      // user not in db
+      return true;
+    }
+
+    const token = v4();
+
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24 * 3
+    ); // 3 days to reset password
+
+    await sendEmail(
+      email,
+      `
+Dear User,
+\n
+I hope you are doing well.
+\n
+Click this link to reset your password: <a href="http://localhost:3000/change-password/${token}">link</a>.
+\n
+Best, 
+Henry Boisdequin From <a href="http://localhost:3000/">Blog</a>
+    `
+    );
     return true;
   }
 
