@@ -9,7 +9,8 @@
     "graphcache",
     "postgresql",
     "resave",
-    "typeorm"
+    "typeorm",
+    "wonka"
   ],
   "python.pythonPath": "/usr/local/bin/python3"
 }
