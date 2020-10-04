@@ -1,6 +1,7 @@
 import { CSSReset, ThemeProvider } from "@chakra-ui/core";
 import { Cache, QueryInput } from "@urql/exchange-graphcache";
 import theme from "../theme";
+import "./changePassword.css";
 
 export default function MyApp({ Component, pageProps }) {
   return (
