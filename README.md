@@ -12,7 +12,7 @@ Website:
 - URQL/Apollo
 - Node.js
 - PostgreSQL
-- MikroORM/TypeORM
+- TypeORM
 - Redis
 - Next.js
 - Chakra
