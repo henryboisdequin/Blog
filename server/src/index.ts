@@ -4,6 +4,7 @@ import cors from "cors";
 import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
+import path from "path";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
@@ -13,7 +14,8 @@ import { User } from "./entities/User";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import path from "path";
+
+// npx typeorm migration:create -d ./src/migrations -n name
 
 const main = async (PORT: number) => {
   const conn = await createConnection({
@@ -27,6 +29,8 @@ const main = async (PORT: number) => {
     entities: [Post, User],
   });
   await conn.runMigrations();
+
+  // await Post.delete({});
 
   const app = express();
 
