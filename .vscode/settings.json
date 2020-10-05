@@ -9,6 +9,7 @@
     "graphcache",
     "postgresql",
     "resave",
+    "textcolor",
     "typeorm",
     "wonka"
   ],
