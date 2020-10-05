@@ -1,5 +1,11 @@
-import { cacheExchange } from "@urql/exchange-graphcache";
-import { dedupExchange, Exchange, fetchExchange } from "urql";
+import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import { Router } from "next/router";
+import {
+  dedupExchange,
+  Exchange,
+  fetchExchange,
+  stringifyVariables,
+} from "urql";
 import { pipe, tap } from "wonka";
 import {
   LoginMutation,
@@ -9,7 +15,6 @@ import {
   RegisterMutation,
 } from "../generated/graphql";
 import { betterUpdateQuery } from "./betterUpdateQuery";
-import { Router } from "next/router";
 
 const errorExchange: Exchange = ({ forward }) => (ops$) => {
   return pipe(
@@ -24,7 +29,7 @@ const errorExchange: Exchange = ({ forward }) => (ops$) => {
   );
 };
 
-const cursorPagination = (cursorArgument = "cursor"): Resolver => {
+const cursorPagination = (): Resolver => {
   return (_parent, fieldArgs, cache, info) => {
     const { parentKey: entityKey, fieldName } = info;
 
@@ -34,6 +39,18 @@ const cursorPagination = (cursorArgument = "cursor"): Resolver => {
     if (size === 0) {
       return undefined;
     }
+
+    const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`;
+    const inTheCache = cache.resolveFieldByKey(entityKey, fieldKey);
+    info.partial = !inTheCache;
+    const results: string[] = [];
+
+    fieldInfos.forEach((fi) => {
+      const data = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string[];
+      results.push(...data);
+    });
+
+    return results;
 
     //   const visited = new Set();
     //   let result: NullArray<string> = [];
@@ -98,6 +115,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      resolvers: {
+        Query: {
+          posts: cursorPagination(),
+        },
+      },
       updates: {
         Mutation: {
           logout: (_result, args, cache, info) => {
