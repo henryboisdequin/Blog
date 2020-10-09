@@ -22,9 +22,13 @@ const Index = () => {
   return (
     <Layout>
       <Flex align="center">
-        <Heading>Blog</Heading>
+        <Heading mb="10px" fontFamily="Tahoma, Geneva, sans-serif">
+          BlogStack
+        </Heading>
         <NextLink href="/create-post">
-          <Link ml="auto">Create Post</Link>
+          <Link ml="auto">
+            <Button mb="10px">Create Post</Button>
+          </Link>
         </NextLink>
       </Flex>
 
