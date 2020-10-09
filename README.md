@@ -20,7 +20,7 @@ Website:
 
 ### Features (in progress)
 
-- Secure login/register/logout experience (cookies)
+- Secure login/register/logout experience (cookies/sessions)
 - Change password with email link
 - Ability to post blog posts
 - Adding photos to your blog post

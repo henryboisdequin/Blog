@@ -3,6 +3,7 @@
     "Formik",
     "Mikro",
     "URQL",
+    "Updoot",
     "chakra",
     "dedup",
     "esnext",
@@ -12,6 +13,7 @@
     "resave",
     "textcolor",
     "typeorm",
+    "updoots",
     "wonka"
   ],
   "python.pythonPath": "/usr/local/bin/python3"
