@@ -31,7 +31,7 @@ const main = async (PORT: number) => {
   });
   await conn.runMigrations();
 
-  // await Post.delete({});
+  // await Updoot.delete({});
 
   const app = express();
 
