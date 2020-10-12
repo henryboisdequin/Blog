@@ -59,6 +59,14 @@ const Login: React.FC<{}> = ({}) => {
                     </Link>
                   </NextLink>
                 </Box>
+
+                <Box ml="auto" mt={2} position="unset">
+                  <NextLink href="/register">
+                    <Link ml="auto" style={{ color: "grey" }}>
+                      New to BlogStack?
+                    </Link>
+                  </NextLink>
+                </Box>
               </Flex>
             </Box>
             <Button

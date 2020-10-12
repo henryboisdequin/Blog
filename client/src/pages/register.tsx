@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/core";
+import { Box, Button, Link } from "@chakra-ui/core";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
@@ -8,6 +8,7 @@ import { Wrapper } from "../components/Wrapper";
 import { useRegisterMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { toErrorMap } from "../utils/toErrorMap";
+import NextLink from "next/link";
 
 interface registerProps {}
 
@@ -50,6 +51,13 @@ const Register: React.FC<registerProps> = ({}) => {
                 label="Password"
                 type="password"
               />
+            </Box>
+            <Box mt={2}>
+              <NextLink href="/login">
+                <Link ml="auto" style={{ color: "grey" }}>
+                  Already a BlogStack user?
+                </Link>
+              </NextLink>
             </Box>
             <Button
               mt={4}

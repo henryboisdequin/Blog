@@ -1,6 +1,6 @@
 # Blog
 
-A fullstack blog site deployed with ...
+A fullstack blog site deployed on Digital Ocean and Vultr.
 
 Website:
 
