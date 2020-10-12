@@ -41,6 +41,10 @@ cd Blog/
 2. Install Dependencies
 
 ```
+cd server/
+yarn
+
+cd .. && cd client/
 yarn
 ```
 
