@@ -17,6 +17,7 @@ Website:
 - Next.js
 - Chakra
 - Formik
+- DataLoader
 
 ### Features (in progress)
 
