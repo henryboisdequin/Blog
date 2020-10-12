@@ -29,12 +29,17 @@ const Index = () => {
 
   const [{ data: meData }] = useMeQuery();
 
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data, fetching, error }] = usePostsQuery({
     variables,
   });
 
   if (!fetching && !data) {
-    return <div>No posts available</div>;
+    return (
+      <div>
+        <h1>Error</h1>
+        <p>{error?.message}</p>
+      </div>
+    );
   }
 
   return (

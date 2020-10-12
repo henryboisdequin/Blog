@@ -6,6 +6,7 @@
     "URQL",
     "Updoot",
     "chakra",
+    "dataloader",
     "dedup",
     "esnext",
     "graphcache",

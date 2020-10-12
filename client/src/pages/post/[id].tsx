@@ -2,7 +2,7 @@ import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { Layout } from "../../components/Layout";
-import { usePostQuery } from "../../generated/graphql";
+import { useMeQuery, usePostQuery } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 import { Box, Heading } from "@chakra-ui/core";
 import { UpdootSection } from "../../components/UpdootSection";
@@ -13,6 +13,7 @@ interface PostProps {}
 
 const Post: React.FC<PostProps> = ({}) => {
   const [{ data, error, fetching }] = useGetPostFromUrl();
+  const [{ data: userData }] = useMeQuery();
 
   if (error) {
     console.error(error.message);
@@ -40,7 +41,9 @@ const Post: React.FC<PostProps> = ({}) => {
     <Layout>
       <Heading mb={4}>{heading}</Heading>
       <Box mb={4}>{data.post.text}</Box>
-      <EditDeletePostButtons id={data.post.id} />
+      {userData?.me?.id !== data.post.creator.id ? null : (
+        <EditDeletePostButtons id={data.post.id} />
+      )}
     </Layout>
   );
 };
